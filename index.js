@@ -137,7 +137,64 @@ app.delete('/jogadores/:id', (req, res) => {
 
 // esportes
 
-app.get('/esportes', (req, res) => {
+app.get('/entidades', (req, res) => {
+    connection.query('SELECT * FROM entidades', (err, results) => {
+      if (err) {
+        console.error('Erro ao executar a consulta:', err);
+        res.status(500).json({ error: 'Erro ao buscar entidades' });
+        return;
+      }
+      res.json(results);
+    });
+    console.log(req)
+  });
+  
+  app.post('/entidades', (req, res) => {
+    const jogador = req.body;
+    connection.query('INSERT INTO entidades SET ?', jogador, (err, result) => {
+      if (err) {
+        console.error('Erro ao executar a inserção:', err);
+        res.status(500).json({ error: 'Erro ao adicionar jogador' });
+        return;
+      }
+      res.json({ id: result.insertId, ...jogador });
+    });
+  });
+  
+  app.put('/entidades/:id', (req, res) => {
+    const id = req.params.id;
+    const jogador = req.body;
+    connection.query('UPDATE entidades SET ? WHERE id = ?', [jogador, id], (err) => {
+      if (err) {
+        console.error('Erro ao executar a atualização:', err);
+        res.status(500).json({ error: 'Erro ao atualizar jogador' });
+        return;
+      }
+      res.json({ id, ...jogador });
+    });
+  });
+  
+  app.delete('/entidades/:id', (req, res) => {
+    const id = req.params.id;
+    connection.query('DELETE FROM entidades WHERE id = ?', id, (err) => {
+      if (err) {
+        console.error('Erro ao executar a exclusão:', err);
+        res.status(500).json({ error: 'Erro ao excluir jogador' });
+        return;
+      }
+      res.json({ id });
+    });
+  });
+
+
+  
+
+// entidades 
+
+
+
+
+  app.get('/esportes', (req, res) => {
     connection.query('SELECT * FROM esportes', (err, results) => {
       if (err) {
         console.error('Erro ao executar a consulta:', err);
@@ -186,6 +243,173 @@ app.get('/esportes', (req, res) => {
     });
   });
 
+
+
+
+
+  // torneios
+
+
+
+  app.get('/torneios', (req, res) => {
+    connection.query('SELECT * FROM torneios', (err, results) => {
+      if (err) {
+        console.error('Erro ao executar a consulta:', err);
+        res.status(500).json({ error: 'Erro ao buscar torneios' });
+        return;
+      }
+      res.json(results);
+    });
+    console.log(req)
+  });
+  
+  app.post('/torneios', (req, res) => {
+    const jogador = req.body;
+    connection.query('INSERT INTO torneios SET ?', jogador, (err, result) => {
+      if (err) {
+        console.error('Erro ao executar a inserção:', err);
+        res.status(500).json({ error: 'Erro ao adicionar jogador' });
+        return;
+      }
+      res.json({ id: result.insertId, ...jogador });
+    });
+  });
+  
+  app.put('/torneios/:id', (req, res) => {
+    const id = req.params.id;
+    const jogador = req.body;
+    connection.query('UPDATE torneios SET ? WHERE id = ?', [jogador, id], (err) => {
+      if (err) {
+        console.error('Erro ao executar a atualização:', err);
+        res.status(500).json({ error: 'Erro ao atualizar jogador' });
+        return;
+      }
+      res.json({ id, ...jogador });
+    });
+  });
+  
+  app.delete('/torneios/:id', (req, res) => {
+    const id = req.params.id;
+    connection.query('DELETE FROM torneios WHERE id = ?', id, (err) => {
+      if (err) {
+        console.error('Erro ao executar a exclusão:', err);
+        res.status(500).json({ error: 'Erro ao excluir jogador' });
+        return;
+      }
+      res.json({ id });
+    });
+  });
+
+
+
+
+  // quadras
+
+
+  app.get('/quadras', (req, res) => {
+    connection.query('SELECT * FROM quadras', (err, results) => {
+      if (err) {
+        console.error('Erro ao executar a consulta:', err);
+        res.status(500).json({ error: 'Erro ao buscar quadras' });
+        return;
+      }
+      res.json(results);
+    });
+    console.log(req)
+  });
+  
+  app.post('/quadras', (req, res) => {
+    const jogador = req.body;
+    connection.query('INSERT INTO quadras SET ?', jogador, (err, result) => {
+      if (err) {
+        console.error('Erro ao executar a inserção:', err);
+        res.status(500).json({ error: 'Erro ao adicionar jogador' });
+        return;
+      }
+      res.json({ id: result.insertId, ...jogador });
+    });
+  });
+  
+  app.put('/quadras/:id', (req, res) => {
+    const id = req.params.id;
+    const jogador = req.body;
+    connection.query('UPDATE quadras SET ? WHERE id = ?', [jogador, id], (err) => {
+      if (err) {
+        console.error('Erro ao executar a atualização:', err);
+        res.status(500).json({ error: 'Erro ao atualizar jogador' });
+        return;
+      }
+      res.json({ id, ...jogador });
+    });
+  });
+  
+  app.delete('/quadras/:id', (req, res) => {
+    const id = req.params.id;
+    connection.query('DELETE FROM quadras WHERE id = ?', id, (err) => {
+      if (err) {
+        console.error('Erro ao executar a exclusão:', err);
+        res.status(500).json({ error: 'Erro ao excluir jogador' });
+        return;
+      }
+      res.json({ id });
+    });
+  });
+
+
+
+  // Placar
+
+
+
+
+  app.get('/placar', (req, res) => {
+    connection.query('SELECT * FROM placar', (err, results) => {
+      if (err) {
+        console.error('Erro ao executar a consulta:', err);
+        res.status(500).json({ error: 'Erro ao buscar placar' });
+        return;
+      }
+      res.json(results);
+    });
+    console.log(req)
+  });
+  
+  app.post('/placar', (req, res) => {
+    const jogador = req.body;
+    connection.query('INSERT INTO placar SET ?', jogador, (err, result) => {
+      if (err) {
+        console.error('Erro ao executar a inserção:', err);
+        res.status(500).json({ error: 'Erro ao adicionar jogador' });
+        return;
+      }
+      res.json({ id: result.insertId, ...jogador });
+    });
+  });
+  
+  app.put('/placar/:id', (req, res) => {
+    const id = req.params.id;
+    const jogador = req.body;
+    connection.query('UPDATE placar SET ? WHERE id = ?', [jogador, id], (err) => {
+      if (err) {
+        console.error('Erro ao executar a atualização:', err);
+        res.status(500).json({ error: 'Erro ao atualizar jogador' });
+        return;
+      }
+      res.json({ id, ...jogador });
+    });
+  });
+  
+  app.delete('/placar/:id', (req, res) => {
+    const id = req.params.id;
+    connection.query('DELETE FROM placar WHERE id = ?', id, (err) => {
+      if (err) {
+        console.error('Erro ao executar a exclusão:', err);
+        res.status(500).json({ error: 'Erro ao excluir jogador' });
+        return;
+      }
+      res.json({ id });
+    });
+  });
 // Iniciar o servidor
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
