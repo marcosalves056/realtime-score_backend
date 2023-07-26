@@ -7,7 +7,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Configurar o banco de dados
-const connection = mysql.createConnection({
+const connection = mysql.createPool({
     host: 'www.paulocruzautomacoes.com.br',
     user: 'paulo449_root',
     password: 'A)mU$YP]QL2c',
@@ -16,18 +16,24 @@ const connection = mysql.createConnection({
     // protocol: 'TCP'
   });
 
-connection.connect((err) => {
-    console.log("conectado no banco")
-  if (err) {
-    console.error('Erro ao conectar ao banco de dados:', err);
-    return;
-  }
-  console.log('Conexão bem-sucedida ao banco de dados.');
+// Configurar o banco de dados
+const pool = mysql.createPool({
+  host: 'www.paulocruzautomacoes.com.br',
+  user: 'paulo449_root',
+  password: 'A)mU$YP]QL2c',
+  database: 'paulo449_placar_ao_vivo',
+  port: 3306,
+  connectionLimit: 10, // Definindo o limite máximo de conexões no pool
+  connectTimeout: 5000, // Tempo máximo de espera para conectar (em milissegundos)
+  acquireTimeout: 5000, // Tempo máximo de espera para obter uma conexão do pool (em milissegundos)
+  waitForConnections: true, // Se true, o pool enfileira as conexões quando todas estiverem em uso
+  queueLimit: 0, // Limite de tamanho da fila quando waitForConnections é verdadeiro (0 = ilimitado)
 });
 
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
+
 
 // Rotas CRUD para a tabela 'jogadores'
 app.get('/jogadores', (req, res) => {
