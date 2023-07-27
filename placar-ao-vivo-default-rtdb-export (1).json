@@ -1,0 +1,206 @@
+{
+  "dados": [
+    {
+      "entidades": [
+        {
+          "nome_entidade": "Arena Club Racket",
+          "torneios": [
+            {
+              "nome_torneio": "2o Open BT",
+              "quadras": [
+                {
+                  "categoria": "DXA",
+                  "estado": "Encerrado",
+                  "games": [
+                    {
+                      "jogador1": 0,
+                      "jogador2": 0
+                    },
+                    {
+                      "jogador1": 0,
+                      "jogador2": 0
+                    },
+                    {
+                      "jogador1": 0,
+                      "jogador2": 0
+                    }
+                  ],
+                  "jogador1": "Cruz / Padua",
+                  "jogador2": "Souza / Melo",
+                  "jogador3": "",
+                  "jogador4": "",
+                  "pontos": {
+                    "jogador1": 0,
+                    "jogador2": 0
+                  },
+                  "quadra": "Quadra#1",
+                  "rodada": "Grupo 1/3"
+                },
+                {
+                  "categoria": "DMB",
+                  "estado": "Jogando",
+                  "games": [
+                    {
+                      "jogador1": 0,
+                      "jogador2": 0
+                    },
+                    {
+                      "jogador1": 0,
+                      "jogador2": 0
+                    },
+                    {
+                      "jogador1": 0,
+                      "jogador2": 0
+                    }
+                  ],
+                  "jogador1": "Paul / Roger",
+                  "jogador2": "Carl / Hans",
+                  "jogador3": "",
+                  "jogador4": "",
+                  "pontos": {
+                    "jogador1": 0,
+                    "jogador2": 0
+                  },
+                  "quadra": "Quadra#2",
+                  "rodada": "Semi Final"
+                },
+                {
+                  "categoria": "DMA",
+                  "games": [
+                    {
+                      "jogador1": 0,
+                      "jogador2": 0
+                    },
+                    {
+                      "jogador1": "",
+                      "jogador2": ""
+                    },
+                    {
+                      "jogador1": "",
+                      "jogador2": ""
+                    }
+                  ],
+                  "jogador1": "Pedro / Jose",
+                  "jogador2": "Joao / Carlos",
+                  "pontos": {
+                    "jogador1": 0,
+                    "jogador2": 0
+                  },
+                  "quadra": "Quadra#3",
+                  "rodada": "Final"
+                },
+                {
+                  "categoria": "DMA",
+                  "games": [
+                    {
+                      "jogador1": 0,
+                      "jogador2": 0
+                    },
+                    {
+                      "jogador1": "",
+                      "jogador2": ""
+                    },
+                    {
+                      "jogador1": "",
+                      "jogador2": ""
+                    }
+                  ],
+                  "jogador1": "Pedro / Jose",
+                  "jogador2": "Joao / Carlos",
+                  "pontos": {
+                    "jogador1": 0,
+                    "jogador2": 0
+                  },
+                  "quadra": "Quadra#4",
+                  "rodada": "Final"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "nome_entidade": "Nippon",
+          "torneios": [
+            {
+              "nome_torneio": "Nippon Open",
+              "quadras": [
+                {
+                  "categoria": "DFC",
+                  "estado": "Jogando",
+                  "games": [
+                    {
+                      "jogador1": 6,
+                      "jogador2": 4
+                    },
+                    {
+                      "jogador1": 4,
+                      "jogador2": 6
+                    },
+                    {
+                      "jogador1": 5,
+                      "jogador2": 5
+                    }
+                  ],
+                  "jogador1": "KEILA / MAIA",
+                  "jogador2": "MARIA / KOGA",
+                  "jogador3": "",
+                  "jogador4": "",
+                  "pontos": {
+                    "jogador1": 15,
+                    "jogador2": 30
+                  },
+                  "quadra": "Quadra#1",
+                  "rodada": "Final"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "esporte": "Beach Tennis"
+    },
+    {
+      "entidades": [
+        {
+          "nome_entidade": "Bunka SBC",
+          "torneios": [
+            {
+              "nome_torneio": "Copa Bunka",
+              "quadras": [
+                {
+                  "categoria": "DFC",
+                  "estado": "Jogando",
+                  "games": [
+                    {
+                      "jogador1": 6,
+                      "jogador2": 4
+                    },
+                    {
+                      "jogador1": 4,
+                      "jogador2": 6
+                    },
+                    {
+                      "jogador1": 5,
+                      "jogador2": 5
+                    }
+                  ],
+                  "jogador1": "KEILA / MAIA",
+                  "jogador2": "MARIA / KOGA",
+                  "jogador3": "",
+                  "jogador4": "",
+                  "pontos": {
+                    "jogador1": 7,
+                    "jogador2": 11
+                  },
+                  "quadra": "Quadra#1",
+                  "rodada": "Final"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "esporte": "Badminton"
+    }
+  ]
+}

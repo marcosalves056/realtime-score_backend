@@ -1,7 +1,7 @@
 const net = require("net");
 const query = require("./connectDatabase");
 
-const HOST = "192.168.15.11"; // O nome de host ou endereço IP do servidor
+const HOST = "10.0.0.219"; // O nome de host ou endereço IP do servidor
 const PORT = 4999; // A porta usada pelo servidor
 
 let player1plus = null;
@@ -84,7 +84,7 @@ function setcontrolPlayer1ButtonPlus() {
     if (player1Assigned && player2Assigned) {
       if (!script) {
         script = `INSERT INTO placar (controle_mais_1, controle_reset_1, controle_menos_1, controle_mais_2, controle_reset_2, controle_menos_2, painel_ip, id_torneio, id_quadra)
-        VALUES ('${player1plus}', '${player1reset}', '${player1sub}', '${player2plus}', '${player2reset}', '${player2sub}', '192.168.1.100', 1, 1);`;
+        VALUES ('${player1plus}', '${player1reset}', '${player1sub}', '${player2plus}', '${player2reset}', '${player2sub}', '192.168.1.100', 1, 6);`;
         console.log(script);
         query(script);
       } else {

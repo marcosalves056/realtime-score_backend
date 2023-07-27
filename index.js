@@ -20,6 +20,138 @@ const connection = mysql.createPool({
 app.use(bodyParser.json());
 app.use(cors());
 
+app.get("/dados", (req, res) => {
+  const jsonData = {
+    dados: [],
+  };
+
+  connection.query("SELECT * FROM entidades", async (err, entidades) => {
+    if (err) {
+      console.error("Erro ao buscar entidades:", err);
+      res.status(500).json({ error: "Erro ao buscar entidades" });
+      return;
+    }
+
+    const fetchTorneios = (entidade) => {
+      return new Promise((resolve, reject) => {
+        connection.query(
+          "SELECT * FROM torneios WHERE id_entidade = ?",
+          entidade.id,
+          (err, torneios) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(torneios);
+            }
+          }
+        );
+      });
+    };
+
+    const fetchQuadras = (torneio) => {
+      return new Promise((resolve, reject) => {
+        connection.query(
+          "SELECT * FROM quadras WHERE id_torneio = ?",
+          torneio.id,
+          (err, quadras) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(quadras);
+            }
+          }
+        );
+      });
+    };
+
+    const fetchEsporte = (torneio) => {
+      return new Promise((resolve, reject) => {
+        connection.query(
+          "SELECT nome FROM esportes WHERE id = ?",
+          torneio.id_esporte,
+          (err, esporte) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(esporte[0].nome);
+            }
+          }
+        );
+      });
+    };
+
+    const fetchEntidadesAndBuildJson = async () => {
+      for (const entidade of entidades) {
+        const entidadeObj = {
+          nome_entidade: entidade.nome,
+          torneios: [],
+        };
+
+        // Fetch torneios for each entidade
+        try {
+          const torneios = await fetchTorneios(entidade);
+
+          for (const torneio of torneios) {
+            const quadras = [];
+
+            // Fetch quadras for each torneio
+            const quadrasData = await fetchQuadras(torneio);
+
+            for (const quadra of quadrasData) {
+              // Fetch games for each quadra
+
+              const quadraObj = {
+                categoria: quadra.categoria,
+                estado: quadra.estado,
+                games: [JSON.parse(quadra.games)],
+                jogador1: quadra.jogador1,
+                jogador2: quadra.jogador2,
+                jogador3: quadra.jogador3,
+                jogador4: quadra.jogador4,
+                pontos: JSON.parse(quadra.pontos),
+                quadra: quadra.quadra,
+                rodada: quadra.rodada,
+                status: quadra.status,
+                rodada: quadra.rodada,
+                quadra: quadra.quadra,
+              };
+
+              quadras.push(quadraObj);
+            }
+
+            // Fetch esporte for each torneio
+            const esporte = await fetchEsporte(torneio);
+
+            const torneioObj = {
+              nome_torneio: torneio.nome,
+              quadras: quadras,
+            };
+
+            entidadeObj.torneios.push(torneioObj);
+          }
+
+          // Fetch esporte for each entidade
+          const esporteEntidade = await fetchEsporte(torneios[0]); // Assumindo que todos os torneios de uma entidade possuem o mesmo esporte
+
+          jsonData.dados.push({
+            entidades: [entidadeObj],
+            esporte: esporteEntidade,
+          });
+        } catch (err) {
+          console.error("Erro ao buscar torneios:", err);
+        }
+      }
+
+      res.json(jsonData);
+    };
+
+    fetchEntidadesAndBuildJson().catch((err) => {
+      console.error("Erro ao buscar informações:", err);
+      res.status(500).json({ error: "Erro ao buscar informações" });
+    });
+  });
+});
+
 // Rotas CRUD para a tabela 'jogadores'
 app.get("/jogadores", (req, res) => {
   connection.query("SELECT * FROM jogadores", (err, results) => {
