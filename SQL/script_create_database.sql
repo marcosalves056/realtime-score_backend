@@ -59,8 +59,10 @@ CREATE TABLE placar (
   controle_menos_2 VARCHAR(255),
   painel_ip VARCHAR(255),
   id_torneio INT,
+  id_quadra INT,
   PRIMARY KEY (id),
-  FOREIGN KEY (id_torneio) REFERENCES torneios (id)
+  FOREIGN KEY (id_torneio) REFERENCES torneios (id),
+  FOREIGN KEY (id_quadra) REFERENCES quadras (id)
 );
 
 INSERT INTO jogadores (nome, ultima_categoria, dt_nascimento, cidade, estado) VALUES
