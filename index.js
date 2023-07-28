@@ -111,8 +111,7 @@ app.get("/dados", (req, res) => {
                 pontos: JSON.parse(quadra.pontos),
                 quadra: quadra.quadra,
                 rodada: quadra.rodada,
-                status: quadra.status,
-                rodada: quadra.rodada,
+                estado: quadra.status,
                 quadra: quadra.quadra,
               };
 
