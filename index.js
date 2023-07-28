@@ -134,7 +134,7 @@ app.get("/dados", async (req, res) => {
               pontos: JSON.parse(quadra.pontos),
               quadra: quadra.quadra,
               rodada: quadra.rodada,
-              status: quadra.status,
+              estado: quadra.status,
             };
 
             quadras.push(quadraObj);
