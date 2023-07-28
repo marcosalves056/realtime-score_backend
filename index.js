@@ -61,7 +61,8 @@ app.get("/dados", async (req, res) => {
         }
       }
 
-      const esporteEntidade = await getEsporte(entidades[0].id);
+      // Fetch esporte for each entidade
+      const esporteEntidade = await getEsporte(torneios[0].id_esporte); // Buscar o esporte com base no primeiro torneio da entidade
 
       jsonData.dados.push({
         entidades: [entidadeObj],
@@ -75,6 +76,108 @@ app.get("/dados", async (req, res) => {
     res.status(500).json({ error: "Erro ao buscar informações" });
   }
 });
+
+async function getEntidades() {
+  return new Promise((resolve, reject) => {
+    connection.query("SELECT * FROM entidades", (err, entidades) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(entidades);
+      }
+    });
+  });
+}
+
+async function getTorneios(idEntidade) {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT * FROM torneios WHERE id_entidade = ?",
+      idEntidade,
+      (err, torneios) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(torneios);
+        }
+      }
+    );
+  });
+}
+
+async function getQuadras(idTorneio) {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT * FROM quadras WHERE id_torneio = ?",
+      idTorneio,
+      (err, quadras) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(quadras);
+        }
+      }
+    );
+  });
+}
+
+async function getJogadoresFromQuadra(quadra) {
+  const jogadores = [];
+
+  if (quadra.jogador1) {
+    const jogador1 = await getJogador(quadra.jogador1);
+    jogadores.push(jogador1);
+  }
+
+  if (quadra.jogador2) {
+    const jogador2 = await getJogador(quadra.jogador2);
+    jogadores.push(jogador2);
+  }
+
+  if (quadra.jogador3) {
+    const jogador3 = await getJogador(quadra.jogador3);
+    jogadores.push(jogador3);
+  }
+
+  if (quadra.jogador4) {
+    const jogador4 = await getJogador(quadra.jogador4);
+    jogadores.push(jogador4);
+  }
+
+  return jogadores;
+}
+
+async function getJogador(idJogador) {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT * FROM jogadores WHERE id = ?",
+      idJogador,
+      (err, jogadores) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(jogadores[0]);
+        }
+      }
+    );
+  });
+}
+
+async function getEsporte(idTorneio) {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT esportes.nome FROM esportes JOIN torneios ON esportes.id = torneios.id_esporte WHERE torneios.id = ?",
+      idTorneio,
+      (err, esporte) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(esporte[0].nome);
+        }
+      }
+    );
+  });
+}
 
 async function getEntidades() {
   return new Promise((resolve, reject) => {
