@@ -413,14 +413,33 @@ app.use("/torneios", torneiosRouter);
 app.post("/quadras", async (req, res) => {
   try {
     const quadra = req.body;
+    let time1 = null;
+    let time2 = null;
+    // console.log()
+    if (
+      typeof quadra.jogador1 == "string" &&
+      typeof quadra.jogador2 == "string"
+    ) {
+      const [resultIdJogador1] = await executeQuery(
+        "INSERT INTO jogadores (nome) VALUES (?)",
+        [quadra.jogador1]
+      );
+      const [resultIdJogador2] = await executeQuery(
+        "INSERT INTO jogadores (nome) VALUES (?)",
+        [quadra.jogador2]
+      );
+      time1 = resultIdJogador1.insertId;
+      time2 = resultIdJogador2.insertId;
+    }
+
     const query =
       "INSERT INTO quadras (id_torneio, games, pontos, jogador1, jogador2, jogador3, jogador4, status, categoria, rodada, quadra) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     const params = [
       quadra.id_torneio,
       quadra.games,
       quadra.pontos,
-      quadra.jogador1,
-      quadra.jogador2,
+      typeof quadra.jogador1 == "string" ? time1 : quadra.jogador1,
+      typeof quadra.jogador1 == "string" ? time2 : quadra.jogador2,
       quadra.jogador3,
       quadra.jogador4,
       quadra.status,
