@@ -22,7 +22,7 @@ app.use(cors());
 
 app.get("/dados", (req, res) => {
   const jsonData = {
-    dados: [],
+    dados: [] || null,
   };
 
   connection.query("SELECT * FROM entidades", async (err, entidades) => {
