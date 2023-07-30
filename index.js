@@ -40,7 +40,7 @@ const handleErrors = (res, err) => {
 
 const fetchPlayerName = async (playerId) => {
   const [results] = await executeQuery(
-    "SELECT nome FROM jogadores WHERE id = ?",
+    "SELECT display FROM jogadores WHERE id = ?",
     [playerId]
   );
   return results[0]?.display || "";
