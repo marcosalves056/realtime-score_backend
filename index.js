@@ -43,10 +43,9 @@ const fetchPlayerName = async (playerId) => {
     "SELECT nome FROM jogadores WHERE id = ?",
     [playerId]
   );
-  return results[0]?.nome || "";
+  return results[0]?.display || "";
 };
 
-// Rota para retornar os dados formatados conforme a necessidade
 app.get("/dados", async (req, res) => {
   try {
     const jsonData = {
@@ -77,7 +76,7 @@ app.get("/dados", async (req, res) => {
         "SELECT nome FROM esportes WHERE id = ?",
         torneio.id_esporte
       );
-      return results[0]?.display || "";
+      return results[0]?.nome || "";
     };
 
     const fetchEntidadesAndBuildJson = async () => {
