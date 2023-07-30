@@ -38,6 +38,14 @@ const handleErrors = (res, err) => {
   res.status(500).json({ error: "Erro ao buscar informações" });
 };
 
+const fetchPlayerName = async (playerId) => {
+  const [results] = await executeQuery(
+    "SELECT nome FROM jogadores WHERE id = ?",
+    [playerId]
+  );
+  return results[0]?.nome || "";
+};
+
 // Rota para retornar os dados formatados conforme a necessidade
 app.get("/dados", async (req, res) => {
   try {
@@ -69,15 +77,7 @@ app.get("/dados", async (req, res) => {
         "SELECT nome FROM esportes WHERE id = ?",
         torneio.id_esporte
       );
-      return results[0]?.nome || "";
-    };
-
-    const fetchPlayerName = async (playerId) => {
-      const [results] = await executeQuery(
-        "SELECT nome FROM jogadores WHERE id = ?",
-        [playerId]
-      );
-      return results[0]?.nome || "";
+      return results[0]?.display || "";
     };
 
     const fetchEntidadesAndBuildJson = async () => {
@@ -151,10 +151,11 @@ playersRouter
   })
   .post(async (req, res) => {
     try {
-      const { nome, idade, posicao } = req.body;
+      const { nome, data_nascimento, ultima_categoria, cidade, estado } =
+        req.body;
       await executeQuery(
-        "INSERT INTO jogadores (nome, idade, posicao) VALUES (?, ?, ?)",
-        [nome, idade, posicao]
+        "INSERT INTO jogadores (nome, data_nascimento, ultima_categoria,cidade,estado) VALUES (?, ?, ?)",
+        [nome, data_nascimento, ultima_categoria, cidade, estado]
       );
       res.status(201).json({ message: "Jogador criado com sucesso" });
     } catch (err) {
@@ -204,8 +205,6 @@ playersRouter
   });
 
 app.use("/jogadores", playersRouter);
-
-// Repita o padrão acima para as rotas CRUD das outras tabelas: 'entidades', 'esportes', 'torneios', 'quadras' e 'placar'
 
 // Rotas CRUD para a tabela 'esportes'
 const esportesRouter = express.Router();
@@ -407,30 +406,41 @@ torneiosRouter
 
 app.use("/torneios", torneiosRouter);
 
-// Repita o padrão acima para as rotas CRUD das outras tabelas: 'quadras' e 'placar'
-
+const verifyPlayer = async (text) => {
+  let player;
+  player = text.trim();
+  const compare_player = await executeQuery(
+    "SELECT * FROM jogadores WHERE UPPER(nome) = ? ",
+    [player.toUpperCase()]
+  );
+  if (compare_player[0].length < 1) {
+    const [resultIdJogador] = await executeQuery(
+      "INSERT INTO jogadores (nome) VALUES (?)",
+      [player]
+    );
+    player = resultIdJogador.insertId;
+  } else if (compare_player[0].length == 1) {
+    player = compare_player[0][0].id;
+  }
+  return player;
+};
 // Rotas CRUD para a tabela 'quadras'
 app.post("/quadras", async (req, res) => {
   try {
     const quadra = req.body;
-    let time1 = null;
-    let time2 = null;
-    // console.log()
-    if (
-      typeof quadra.jogador1 == "string" &&
-      typeof quadra.jogador2 == "string"
-    ) {
-      const [resultIdJogador1] = await executeQuery(
-        "INSERT INTO jogadores (nome) VALUES (?)",
-        [quadra.jogador1]
-      );
-      const [resultIdJogador2] = await executeQuery(
-        "INSERT INTO jogadores (nome) VALUES (?)",
-        [quadra.jogador2]
-      );
-      time1 = resultIdJogador1.insertId;
-      time2 = resultIdJogador2.insertId;
+
+    let player1 = null;
+    let player2 = null;
+    let player3 = null;
+    let player4 = null;
+
+    if (quadra.jogador1.split("/").length > 1) {
+      player1 = await verifyPlayer(quadra.jogador1.split("/")[0]);
+      player2 = await verifyPlayer(quadra.jogador1.split("/")[1]);
+      player3 = await verifyPlayer(quadra.jogador2.split("/")[0]);
+      player4 = await verifyPlayer(quadra.jogador2.split("/")[1]);
     }
+    console.log(player1);
 
     const query =
       "INSERT INTO quadras (id_torneio, games, pontos, jogador1, jogador2, jogador3, jogador4, status, categoria, rodada, quadra) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -438,10 +448,10 @@ app.post("/quadras", async (req, res) => {
       quadra.id_torneio,
       quadra.games,
       quadra.pontos,
-      typeof quadra.jogador1 == "string" ? time1 : quadra.jogador1,
-      typeof quadra.jogador1 == "string" ? time2 : quadra.jogador2,
-      quadra.jogador3,
-      quadra.jogador4,
+      typeof quadra.jogador1 == "string" ? player1 : quadra.jogador1,
+      typeof quadra.jogador1 == "string" ? player2 : quadra.jogador2,
+      typeof quadra.jogador1 == "string" ? player3 : quadra.jogador3,
+      typeof quadra.jogador1 == "string" ? player4 : quadra.jogador4,
       quadra.status,
       quadra.categoria,
       quadra.rodada,
@@ -450,7 +460,20 @@ app.post("/quadras", async (req, res) => {
 
     const [result] = await executeQuery(query, params);
     const newQuadraId = result.insertId;
-    const newQuadra = { id: newQuadraId, ...quadra };
+    const responseJson = {
+      id_torneio: params[0],
+      games: params[1],
+      pontos: params[2],
+      jogador1: await fetchPlayerName(params[3]),
+      jogador2: await fetchPlayerName(params[4]),
+      jogador3: await fetchPlayerName(params[5]),
+      jogador4: await fetchPlayerName(params[6]),
+      status: params[7],
+      categoria: params[8],
+      rodada: params[9],
+      quadra: params[10],
+    };
+    const newQuadra = { id: newQuadraId, ...responseJson };
     res.json(newQuadra);
   } catch (err) {
     handleErrors(res, err);
