@@ -432,12 +432,16 @@ app.post("/quadras", async (req, res) => {
     let player2 = null;
     let player3 = null;
     let player4 = null;
-
-    if (quadra.jogador1.split("/").length > 1) {
-      player1 = await verifyPlayer(quadra.jogador1.split("/")[0]);
-      player2 = await verifyPlayer(quadra.jogador1.split("/")[1]);
-      player3 = await verifyPlayer(quadra.jogador2.split("/")[0]);
-      player4 = await verifyPlayer(quadra.jogador2.split("/")[1]);
+    if (typeof quadra.jogador1 == "string") {
+      if (quadra.jogador1.split("/").length > 1) {
+        player1 = await verifyPlayer(quadra.jogador1.split("/")[0]);
+        player2 = await verifyPlayer(quadra.jogador1.split("/")[1]);
+        player3 = await verifyPlayer(quadra.jogador2.split("/")[0]);
+        player4 = await verifyPlayer(quadra.jogador2.split("/")[1]);
+      } else {
+        player1 = await verifyPlayer(quadra.jogador1);
+        player2 = await verifyPlayer(quadra.jogador2);
+      }
     }
     console.log(player1);
 
